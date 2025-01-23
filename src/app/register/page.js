@@ -1,30 +1,39 @@
 "use client";
 
 import { AuthContext } from "@/provider/AuthProvider";
+import { useRouter } from "next/router";
 import { useContext } from "react";
 
 const page = () => {
-  let { user, setUser, handleError, signInUser } = useContext(AuthContext);
+  let { user, setUser, handleError, registerWithEmail, updateUserProfile } = useContext(AuthContext);
+  let router = useRouter();
 
-  const handleEmailLogin = (event) => {
+  const handleEmailRegister= (event) => {
     event.preventDefault();
 
-    let email = event.target.email.value;
-    let password = event.target.password.value;
+    let form = event.target;
+    let name = form.name.value;
+    let photoUrl = form.photoUrl.value;
+    let email = form.email.value;
+    let password = form.password.value;
 
-    // Call signInUser to log in and handle the promise it returns
-    signInUser(email, password)
-      .then((currentUser) => {
-        setUser(currentUser.user);  // After successful login, update user state
-        alert("Login successful! Welcome back.");
-      })
-      .catch(handleError);  // Handle any error that occurs during login
+    console.log(name, email, photoUrl, password)
+
+    registerWithEmail(email, password)
+    .then(result=>{
+      setUser(result.user);
+      updateUserProfile({ displayName: name, photoURL: photoUrl })
+      .then(()=>{
+        alert('Registration successful! Welcome aboard. Your account has been created, and you can now log in to start exploring.'); 
+        router.push("/")
+      }).catch(handleError)
+    }).catch(handleError)
   };
 
   return (
     <div>
-      <form onSubmit={handleEmailLogin}>
-        <input placeholder="username" name="username" />
+      <form onSubmit={handleEmailRegister}>
+        <input placeholder="name" name="name" />
         <input placeholder="email" name="email" />
         <input placeholder="photoUrl" name="photoUrl" />
         <input placeholder="password" name="password" type="password" />

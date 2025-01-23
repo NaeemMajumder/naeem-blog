@@ -1,6 +1,8 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import AuthProvider from "@/provider/AuthProvider";
+import AuthButton from "./components/AuthButton";
+import Link from "next/link";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,7 +25,8 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased max-w-[1350px] mx-auto`}
       >
-        <>
+        <></>
+        <AuthProvider>
           <div className="navbar bg-base-100">
             <div className="navbar-start">
               <div className="dropdown">
@@ -52,10 +55,10 @@ export default function RootLayout({ children }) {
                   className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
                 >
                   <li>
-                    <a>Home</a>
+                    <Link href="/">Home</Link>
                   </li>
                   <li>
-                    <a>Profile</a>
+                    <Link href="/profile">Profile</Link>
                   </li>
                 </ul>
               </div>
@@ -64,19 +67,15 @@ export default function RootLayout({ children }) {
             <div className="navbar-center hidden lg:flex">
               <ul className="menu menu-horizontal px-1">
                 <li>
-                  <a>Home</a>
+                  <Link href="/">Home</Link>
                 </li>
                 <li>
-                  <a>Profile</a>
+                  <Link href="/profile">Profile</Link>
                 </li>
               </ul>
             </div>
-            <div className="navbar-end">
-              <a className="btn">Button</a>
-            </div>
+            <AuthButton />
           </div>
-        </>
-        <AuthProvider>
           {children}
         </AuthProvider>
       </body>

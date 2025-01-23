@@ -2,9 +2,12 @@
 
 import { AuthContext } from "@/provider/AuthProvider";
 import { useContext } from "react";
+import { useRouter } from "next/navigation";
+
 
 const page = () => {
   let { user, setUser, handleError, signInUser } = useContext(AuthContext);
+  let router = useRouter();
 
   const handleEmailLogin = (event) => {
     event.preventDefault();
@@ -17,6 +20,7 @@ const page = () => {
       .then((currentUser) => {
         setUser(currentUser.user);  // After successful login, update user state
         alert("Login successful! Welcome back.");
+        router.push("/");
       })
       .catch(handleError);  // Handle any error that occurs during login
   };
