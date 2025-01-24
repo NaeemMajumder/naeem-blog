@@ -1,25 +1,29 @@
-"use client"
+// "use client"
 
-import { AuthContext } from "@/provider/AuthProvider";
-import { useRouter } from "next/navigation";
-import { useContext, useEffect } from "react";
+// import { AuthContext } from "@/provider/AuthProvider";
+// import { useRouter } from "next/navigation";
+// import { useContext, useEffect } from "react";
+import {getKindeServerSession} from "@kinde-oss/kinde-auth-nextjs/server";
+import { redirect } from "next/navigation";
 
-const ProfilePage = () => {
-  let { user } = useContext(AuthContext);
-  let router = useRouter();
+const ProfilePage = async() => {
 
-  useEffect(() => {
-    if (!user) {
-      router.push("/login");  // Redirect to login if user is not authenticated
+    const {isAuthenticated, getUser} = getKindeServerSession();
+    const isUserAuthenticated = await isAuthenticated();
+    const user = await getUser()
+    console.log(isUserAuthenticated);
+    console.log(user);
+
+    if(!user){
+        redirect("/");
     }
-  }, [user, router]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-indigo-100 via-purple-200 to-indigo-400 py-12">
       <div className="w-full max-w-3xl bg-white p-8 rounded-3xl shadow-xl transform transition-all hover:scale-105 duration-300">
         <div className="text-center mb-8">
-          <h1 className="text-5xl font-semibold text-gray-800">Welcome, {user ? user.name : 'Loading...'}</h1>
-          <p className="text-gray-600 mt-2 text-lg">Your personalized dashboard</p>
+          <h1 className="text-5xl font-semibold text-gray-800">Welcome, {user ? user.given_name : 'Loading...'}</h1>
+          <p className="text-gray-600 mt-2 text-lg">Welcome to your profile!</p>
         </div>
 
         <div className="space-y-8">
@@ -27,9 +31,8 @@ const ProfilePage = () => {
           <div className="text-center">
             <div className="card bg-base-100 shadow-xl rounded-lg p-6">
               <h2 className="text-3xl font-semibold text-gray-800 mb-4">Profile Information</h2>
-              <p className="text-gray-600 text-xl mb-2">Name: <span className="font-medium">{user ? user.name : 'Loading...'}</span></p>
+              <p className="text-gray-600 text-xl mb-2">Name: <span className="font-medium">{user ? user.given_name : 'Loading...'}</span></p>
               <p className="text-gray-600 text-xl mb-2">Email: <span className="font-medium">{user ? user.email : 'Loading...'}</span></p>
-              <p className="text-gray-600 text-xl">Joined: <span className="font-medium">{user ? user.joined : 'Loading...'}</span></p>
             </div>
           </div>
 
