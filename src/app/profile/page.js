@@ -18,6 +18,8 @@ const ProfilePage = async() => {
         redirect("/");
     }
 
+
+    
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-indigo-100 via-purple-200 to-indigo-400 py-12">
       <div className="w-full max-w-3xl bg-white p-8 rounded-3xl shadow-xl transform transition-all hover:scale-105 duration-300">
